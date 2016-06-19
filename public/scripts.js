@@ -50,7 +50,8 @@ function showList(){ // get to do list from database and appends to outputDiv
 
   $('body').on('click', '.delete', function() {  // delete task function
     // $('#outputDiv').empty();
-    console.log($(this).data('id'));
+    var delClick = confirm('Are you sure?');
+      if(delClick === true) {
     $('#outputDiv').empty();
     var taskID = {
       "id": $(this).data('id')
@@ -63,6 +64,9 @@ function showList(){ // get to do list from database and appends to outputDiv
         showList(data);
       }
     });
+  } else {
+    console.log("no");
+  }
   });
   $('body').on('click', '.complete', function() {  // delete task function
     // $('#outputDiv').empty();
