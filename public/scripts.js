@@ -19,11 +19,9 @@ $( document ).ready(function(){
     clearInput(); // calls clearInput function to clear value of text input box
   }); //end button on click function
 
-
   function clearInput() {  // clears data from input box
       document.getElementById('taskIn').value='';
     }   // end of clearinput box
-
 
 function showList(){ // get to do list from database and appends to outputDiv
     $.ajax({
@@ -32,10 +30,18 @@ function showList(){ // get to do list from database and appends to outputDiv
       success: function(dataIn){
         $('#outputDiv').empty();  // resets div to empty
         for(i=0; i<dataIn.length; i++) {
+          var completedButton = "";
+          var deleteButton = "<button class='delete' data-id='" + dataIn[i].id + "'>&#10006;" + "</button>";
+          if (dataIn[i].taskstatus === true) {
+            completedButton = "<button class='complete done' data-id='" + dataIn[i].id + "'>&#10003;" + "</button>";
+            taskOut = "<p class='done'>" + dataIn[i].taskname + ":  " + dataIn[i].taskstatus;
+            } else {
+            completedButton = "<button class='complete' data-id='" + dataIn[i].id + "'>&#10003;" + "</button>";
+            }
           var taskOut = "<p>" + dataIn[i].taskname + ":  " + dataIn[i].taskstatus;
-          var deleteButton = "<button class='delete' data-id='" + dataIn[i].id + "'>Delete" + "</button>";
-          $('#outputDiv').append(taskOut);
+          $('#outputDiv').append(completedButton);
           $('#outputDiv').append(deleteButton);
+          $('#outputDiv').append(taskOut);
         }
       } // end success
     }); //end ajax call to get list
@@ -57,6 +63,21 @@ function showList(){ // get to do list from database and appends to outputDiv
       }
     });
   });
-
+  $('body').on('click', '.complete', function() {  // delete task function
+    // $('#outputDiv').empty();
+    console.log($(this).data('id'));
+    $('#outputDiv').empty();
+    var taskID = {
+      "id": $(this).data('id')
+    };
+    $.ajax({  // sends to delete from database
+      type: 'POST',
+      url: '/statusComplete',
+      data: taskID,
+      success: function(data) {
+        showList(data);
+      }
+    });
+  });
 
 }); // end document ready

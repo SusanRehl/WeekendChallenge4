@@ -54,6 +54,21 @@ app.post('/deleteTask', urlencodedParser, function(req, res) {
     });
 });
 
+app.post('/statusComplete', urlencodedParser, function(req, res) {
+    var results =[];
+    pg.connect(connectionString, function(err, client, done) {
+      var resetTasks = client.query('UPDATE tdlist set taskstatus=true WHERE id= ' + req.body.id + ';');
+      console.log( "query: " + resetTasks );
+      var rows = 0;
+      resetTasks.on( 'row', function ( row ){  // push each row in query into results array
+        results.push( row );
+        res.send(results);
+        }); // end query push
+      resetTasks.on( 'end', function (){
+        return res.json(results);
+        });
+    });
+});
 
 app.listen(3000, 'localhost', function(req, res) {  // spin up port
   console.log("listening on port 3000");
