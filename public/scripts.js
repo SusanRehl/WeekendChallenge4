@@ -33,7 +33,7 @@ function showList(){ // get to do list from database and appends to outputDiv
           var completedButton = "";
           var deleteButton = "<button class='delete' data-id='" + dataIn[i].id + "'>&#10006;" + "</button>";
           if (dataIn[i].taskstatus === true) {
-            completedButton = "<button class='complete done' data-id='" + dataIn[i].id + "'>&#10003;" + "</button>";
+            completedButton = "<button class='complete done disabled' data-id='" + dataIn[i].id + "'>&#10003;" + "</button>";
             taskOut = "<p class='done'>" + dataIn[i].taskname + ":  " + dataIn[i].taskstatus;
             } else {
             completedButton = "<button class='complete' data-id='" + dataIn[i].id + "'>&#10003;" + "</button>";
