@@ -31,14 +31,15 @@ function showList(){ // get to do list from database and appends to outputDiv
         $('#outputDiv').empty();  // resets div to empty
         for(i=0; i<dataIn.length; i++) {
           var completedButton = "";
+          var taskOut = "";
           var deleteButton = "<button class='delete' data-id='" + dataIn[i].id + "'>&#10006;" + "</button>";
           if (dataIn[i].taskstatus === true) {
-            completedButton = "<button class='complete done disabled' data-id='" + dataIn[i].id + "'>&#10003;" + "</button>";
-            taskOut = "<p class='done'>" + dataIn[i].taskname + ":  " + dataIn[i].taskstatus;
+            completedButton = "<button class='complete done' disabled data-id='" + dataIn[i].id + "'>&#10003;" + "</button>";
+            taskOut = "<p class='doneTask'>" + dataIn[i].taskname;
             } else {
             completedButton = "<button class='complete' data-id='" + dataIn[i].id + "'>&#10003;" + "</button>";
+            taskOut = "<p>" + dataIn[i].taskname;
             }
-          var taskOut = "<p>" + dataIn[i].taskname + ":  " + dataIn[i].taskstatus;
           $('#outputDiv').append(completedButton);
           $('#outputDiv').append(deleteButton);
           $('#outputDiv').append(taskOut);

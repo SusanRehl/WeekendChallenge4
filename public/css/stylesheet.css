@@ -4,16 +4,22 @@ body {
 }
 h2 {
 	font-size: 1.5em;
+	color: #4f6c96;
 	padding: 10px 0 5px 0;
 }
 
 h4 {
 	font-size: 1.25em;
-	padding: 10px 0 5px 0;
+	color: #4f6c96;
 }
+
+p {
+	margin: -20px 0 10px 80px;
+}
+
 .delete {
-	color: #cc0000;
-	background-color: #ffe6e6;
+	color: #972936;
+	background-color: #faebed;
 	width: 20px;
 	height: 20px;
 	text-align: center;
@@ -21,16 +27,25 @@ h4 {
 	margin-left: 10px;
 	margin-top: -10px;
 	padding: 0 1px 3px 1px;
+	cursor: pointer;
+}
+
+.delete:hover {
+    background-color: #972936;
+    color: white;
+		cursor: pointer;
 }
 
 .complete {
-	color: #000099;
-	background-color: #99d6ff;
+	color: #4f6c96;
+	background-color: #bcc9dc;
 	width: 25px;
 	height: 25px;
 	font-size: 1.2em;
 	text-align: center;
+	margin: 0 0 0 15px;
 	padding: 0  2px 2px 2px;
+	cursor: pointer;
 }
 
  .done {
@@ -38,12 +53,30 @@ h4 {
 	 background-color: #e6e6e6;
  }
 
+.doneTask {
+	color: #999999;
+}
+
 #taskIn {
-	font-size:1.5em;
+	font-size:1.25em;
+	width: 400px;
 }
 
 #addButton {
-	font-size: 1.15em;
+	color: #4f6c96;
+	font-size: 1.1em;
 	font-family: 'Raleway', sans-serif;
-	background-color: #99d6ff;
+	background-color: #bcc9dc;
+	transition-duration: 0.4s;
+}
+
+#addButton:hover, .complete:hover {
+    background-color: #4f6c96;
+    color: white;
+		cursor: pointer;
+}
+.done[disabled]:hover {
+	color: #999999;
+	background-color: #e6e6e6;
+	cursor: none;
 }
