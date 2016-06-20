@@ -1,10 +1,10 @@
-$( document ).ready(function(){
+$( document ).ready(function(){  // sets document for jQuery
   showList();  // calls showlist function to get tasks from database and send to DOM
 
   $('#addButton').on('click', function(){  // get task name from input
     var taskName = $('#taskIn').val();
     var taskStatus = false;  // sets taskstatus to false (not completed)
-    var newTask = {
+    var newTask = {  // creates object to send
       "taskname": taskName,
       "taskstatus": taskStatus,
     }; // end object
@@ -29,18 +29,18 @@ function showList(){ // get to do list from database and appends to outputDiv
       url: '/getList',
       success: function(dataIn){
         $('#outputDiv').empty();  // resets div to empty
-        for(i=0; i<dataIn.length; i++) {
+        for(i=0; i<dataIn.length; i++) {  //loop thru database
           var completedButton = "";
           var taskOut = "";
           var deleteButton = "<button class='delete' data-id='" + dataIn[i].id + "'>&#10006;" + "</button>";
-          if (dataIn[i].taskstatus === true) {
+          if (dataIn[i].taskstatus === true) {  // adds class done and disables to completed tasks
             completedButton = "<button class='complete done' disabled data-id='" + dataIn[i].id + "'>&#10003;" + "</button>";
-            taskOut = "<p class='doneTask'>" + dataIn[i].taskname;
+            taskOut = "<p class='doneTask'>" + dataIn[i].taskname;  // adds class doneTask to taskname
             } else {
             completedButton = "<button class='complete' data-id='" + dataIn[i].id + "'>&#10003;" + "</button>";
             taskOut = "<p>" + dataIn[i].taskname;
             }
-          $('#outputDiv').append(completedButton);
+          $('#outputDiv').append(completedButton);  // sends all to DOM
           $('#outputDiv').append(deleteButton);
           $('#outputDiv').append(taskOut);
         }
@@ -49,10 +49,9 @@ function showList(){ // get to do list from database and appends to outputDiv
   }// end show list function
 
   $('body').on('click', '.delete', function() {  // delete task function
-    // $('#outputDiv').empty();
-    var delClick = confirm('Are you sure?');
+    var delClick = confirm('Are you sure?');  // alert box if completed box is checked
       if(delClick === true) {
-    $('#outputDiv').empty();
+    $('#outputDiv').empty();  // if yes, then proceeds with function
     var taskID = {
       "id": $(this).data('id')
     };
@@ -64,11 +63,10 @@ function showList(){ // get to do list from database and appends to outputDiv
         showList(data);
       }
     });
-  } else {
-    console.log("no");
+  } else {  // if no, stops function
   }
   });
-  $('body').on('click', '.complete', function() {  // delete task function
+  $('body').on('click', '.complete', function() {  // complete task function
     // $('#outputDiv').empty();
     console.log($(this).data('id'));
     $('#outputDiv').empty();

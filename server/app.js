@@ -24,37 +24,38 @@ app.get('/getList', function(req, res) { // displaying to do list - uses GET
     todoList.on('end', function() {  // sending to scripts
       return res.json(results);
     });
+    done(); // allowing more than 5 tasks to be added
   });
   });
 
-app.post('/addTask',urlencodedParser, function(req, res) {  // adding animal to database
+app.post('/addTask',urlencodedParser, function(req, res) {  // adding task to database and DOM
   var newTask = req.body.taskname + req.body.taskstatus;
   var results = [];  // array to hold tasks
   pg.connect(connectionString, function(err, client, done) {
     client.query('INSERT INTO tdlist(taskname, taskstatus) VALUES($1, $2)', [req.body.taskname, req.body.taskstatus]);
       res.send(newTask);
+      done();
   }); // end database connection
  }); // end add product post function
 
-app.post('/deleteTask', urlencodedParser, function(req, res) {
+app.post('/deleteTask', urlencodedParser, function(req, res) {  // deleting task from database and DOM
     var results =[];
     pg.connect(connectionString, function(err, client, done) {
       var resetTasks = client.query('DELETE FROM tdlist WHERE id = ' + req.body.id + ';');
-      // var resetTasks = client.query( 'SELECT * FROM tdlist WHERE taskstatus=false ORDER BY taskstatus DESC;' );
       console.log( "query: " + resetTasks );
-      // push each row in query into results array
-      var rows = 0;
+      var rows = 0;  // push each row in query into results array
       resetTasks.on( 'row', function ( row ){
         results.push( row );
         res.send(results);
         }); // end query push
-      resetTasks.on( 'end', function (){
+      resetTasks.on( 'end', function (){  // return results array
         return res.json(results);
         });
+        done();
     });
 });
 
-app.post('/statusComplete', urlencodedParser, function(req, res) {
+app.post('/statusComplete', urlencodedParser, function(req, res) { // changes status of completed tasks
     var results =[];
     pg.connect(connectionString, function(err, client, done) {
       var resetTasks = client.query('UPDATE tdlist set taskstatus=true WHERE id= ' + req.body.id + ';');
@@ -64,9 +65,10 @@ app.post('/statusComplete', urlencodedParser, function(req, res) {
         results.push( row );
         res.send(results);
         }); // end query push
-      resetTasks.on( 'end', function (){
+      resetTasks.on( 'end', function (){  // sends results array to DOM
         return res.json(results);
         });
+        done();
     });
 });
 
