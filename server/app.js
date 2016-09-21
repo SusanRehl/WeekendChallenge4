@@ -8,31 +8,33 @@ var connectionString='postgres://localhost:5432/todolist';
 
 app.get('/', function(req, res) {  // sets up base url
   console.log('hello from base url get');
-  res.sendFile(path.resolve('views/index.html')); // sends the index.html file to the browser!!!!!!!!!!!
+  res.sendFile(path.resolve('views/index.html')); // sends the index.html file to the browser
 });
 
 app.get('/getList', function(req, res) { // displaying to do list - uses GET
   console.log("in app.get get to do list");
   var results = [];  // array to hold tasks
   pg.connect(connectionString, function(err, client, done) {  // connecting to todolist database
-    var todoList=client.query('SELECT * FROM tdlist ORDER BY taskstatus;');  // getting task and status from tdlist table
-    console.log('query '+ todoList);
-    var rows = 0;
-    todoList.on('row', function(row) {  // pushing to array
-      results.push(row);
-    });  // end query push
-    todoList.on('end', function() {  // sending to scripts
-      return res.json(results);
-    });
-    done(); // allowing more than 5 tasks to be added
-  });
-  });
+    if (err) {
+      console.log(err);
+    } else {
+      var todoList=client.query('SELECT * FROM tdlist ORDER BY taskstatus;');  // getting task and status from tdlist table
+      var rows = 0;
+      todoList.on('row', function(row) {  // pushing to array
+        results.push(row);
+      });  // end query push
+      todoList.on('end', function() {  // sending to scripts
+        return res.json(results);
+      });
+      done(); // allowing more than 5 tasks to be added
+    } // end else
+  }); // end database connection
+}); // end /getList
 
 app.post('/addTask',urlencodedParser, function(req, res) {  // adding task to database and DOM
   var newTask = req.body.taskname + req.body.taskstatus;
-  var results = [];  // array to hold tasks
   pg.connect(connectionString, function(err, client, done) {
-    client.query('INSERT INTO tdlist(taskname, taskstatus) VALUES($1, $2)', [req.body.taskname, req.body.taskstatus]);
+    client.query('INSERT INTO tdlist(taskname, taskstatus) VALUES($1, $2)', [req.body.taskname, req.body.taskstatus]); // could just send 'false' (string) instead of req.body.taskname and not have to set it in scripts
       res.send(newTask);
       done();
   }); // end database connection
@@ -67,7 +69,7 @@ app.post('/statusComplete', urlencodedParser, function(req, res) { // changes st
         }); // end query push
       resetTasks.on( 'end', function (){  // sends results array to DOM
         return res.json(results);
-        });
+      });
         done();
     });
 });
